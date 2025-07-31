@@ -20,7 +20,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/clerk", clerkWebhooks);
-app.post("/api/teacher", teacherRouter);
+
+app.use("/api/teacher", teacherRouter);
 // port
 const PORT = process.env.PORT || 5000;
 
