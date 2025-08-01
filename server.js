@@ -5,8 +5,10 @@ import connectDB from "./configs/mongodb.js";
 import { clerkWebhooks } from "./controllers/webhooks.js";
 import teacherRouter from "./routes/teacherRotuer.js";
 import { clerkMiddleware } from "@clerk/express";
+import connectCloudinary from "./configs/cloudnary.js";
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 //Middlewares
 app.use(cors());
@@ -23,7 +25,6 @@ app.post("/clerk", clerkWebhooks);
 
 app.use("/api/teacher", teacherRouter);
 // port
-const PORT = process.env.PORT || 5000;
 
 connectDB()
   .then(() => {
@@ -34,3 +35,5 @@ connectDB()
   .catch((err) => {
     console.log("MongoDB connection failed", err);
   });
+
+await connectCloudinary()
