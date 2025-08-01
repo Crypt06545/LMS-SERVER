@@ -1,5 +1,8 @@
 import { clerkClient } from "@clerk/express";
+import Course from "../models/Courses.modal.js";
+import { v2 as cloudinary } from "cloudinary";
 
+// update the role
 export const updateRoleTeacher = async (req, res) => {
   try {
     const userId = req.auth().userId; // Changed to use auth() as a function
@@ -9,6 +12,28 @@ export const updateRoleTeacher = async (req, res) => {
       },
     });
     res.json({ success: true, message: "You can Publish a course now" });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// add new course
+export const addCourse = async (req, res) => {
+  try {
+    const { courseData } = req.body;
+    const imageFile = req.file;
+    const teacherId = req.auth().userId;
+    if (!imageFile) {
+      return res.json({ success: false, message: "Thumbnail Not Attached!" });
+    }
+    const parsedCourseData = await JSON.parse(courseData);
+    parsedCourseData.teacher = teacherId;
+    const newCourse = await Course.create(parsedCourseData);
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path);
+    newCourse.courseThumbnail = imageUpload.secure_url;
+    await newCourse.save();
+    res.json({ success: true, message: "Course Added!!" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
