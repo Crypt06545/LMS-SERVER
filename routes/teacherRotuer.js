@@ -1,6 +1,9 @@
 import express from "express";
 import {
   addCourse,
+  getEnrolledStudentsData,
+  getTeacherCourses,
+  teacherDashboardData,
   updateRoleTeacher,
 } from "../controllers/teacherController.js";
 import upload from "../configs/multer.js";
@@ -15,6 +18,8 @@ teacherRouter.post(
   protectTeacher,
   addCourse
 );
+
+teacherRouter.get("/courses", protectTeacher, getTeacherCourses);
+teacherRouter.get("/dashboard", protectTeacher, teacherDashboardData);
+teacherRouter.get("/enrolled-students", protectTeacher, getEnrolledStudentsData);
 export default teacherRouter;
-
-

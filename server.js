@@ -6,6 +6,7 @@ import { clerkWebhooks } from "./controllers/webhooks.js";
 import teacherRouter from "./routes/teacherRotuer.js";
 import { clerkMiddleware } from "@clerk/express";
 import connectCloudinary from "./configs/cloudnary.js";
+import courseRouter from "./routes/coureRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 app.post("/clerk", clerkWebhooks);
 
 app.use("/api/teacher", teacherRouter);
+app.use("/api/course", courseRouter);
 // port
 
 connectDB()
@@ -36,4 +38,4 @@ connectDB()
     console.log("MongoDB connection failed", err);
   });
 
-await connectCloudinary()
+await connectCloudinary();
